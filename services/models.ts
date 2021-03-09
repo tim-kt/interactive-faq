@@ -14,6 +14,7 @@ class Question extends Model {
         question: DataTypes.STRING,
         answer: DataTypes.STRING,
         text: DataTypes.TEXT,
+        keywords: DataTypes.TEXT,
     }
 }
 
