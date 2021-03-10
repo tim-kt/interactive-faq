@@ -2,7 +2,7 @@ import { Database, SQLite3Connector } from "https://deno.land/x/denodb/mod.ts";
 import Question from "../models.ts";
 import { RouterContext, Status } from "https://deno.land/x/oak/mod.ts";
 
-const connector = new SQLite3Connector({filepath: "services/faq.sqlite"});
+const connector = new SQLite3Connector({filepath: "faq.sqlite"});
 const db = new Database(connector);
 
 db.link([Question]);
@@ -57,7 +57,7 @@ const queryQuestions = async (context: RouterContext) => {
     const keywords = keywordsFromString(query);
   
     let mostMatchesId = -1;
-    let mostMatches = -1;
+    let mostMatches = 0;
 
     for (const question of await Question.all()) {
         if (!question.keywords) {

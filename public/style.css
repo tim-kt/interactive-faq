@@ -1,0 +1,77 @@
+* {
+    font-family: 'Trebuchet MS', sans-serif;
+    color: #232127;
+}
+
+.search {
+    display: flex;
+    justify-content: space-around;
+    height: 36px;
+    margin-bottom: 16px;
+}
+
+/* TODO Would a style similar to the chat function be better? */
+
+.bar {
+    width: 100%;
+    border: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    color: #232127;
+    background-color: white;
+    padding-left: 8px;
+}
+
+.bar:focus {
+    outline-color: #6441A4;
+}
+
+.btn {
+    width: 30%;
+    display: block;
+    float: right;
+    border: 0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    color: white;
+    background-color: #6441A4;
+}
+
+.btn:focus {
+    outline-color: #201c2b;
+}
+
+.btn:active {
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+}
+
+p {
+    margin: 10px;
+}
+
+.original-question {
+    text-transform: uppercase;
+}
+
+.original-question, .wrong-answer {
+    font-size: 12px;
+    font-weight: 500;
+    color: #5e5b66;
+}
+
+.answer {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.text {
+    font-size: 16px;
+}
