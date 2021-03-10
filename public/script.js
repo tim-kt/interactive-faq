@@ -10,7 +10,7 @@ async function query() {
     const input = window.document.getElementById("question").value;
     window.Twitch.ext.rig.log("Search input: " + input);
 
-    if (!input) {
+    if (!input || !input.trim()) {
         return;
     }
 
@@ -26,7 +26,7 @@ async function query() {
     }
     else {
         const data = await response.json();
-        window.Twitch.ext.rig.log("Received data: " + data);
+        window.Twitch.ext.rig.log("Received data: " + JSON.stringify(data));
         window.document.getElementById("output").innerHTML = generateCard(data.question, data.answer, data.text);
     }    
 }
@@ -36,7 +36,7 @@ function generateCard(question, answer, text) {
         <div class="card">
             <p class="original-question">Q: ${question}</p>
             <p class="answer">${answer}</p>
-            <p class="text">${text}</p>
+            <p class="text">${text ? text : ""}</p>
             <p class="wrong-answer">Not what you were looking for? Ask away in chat!</p>
         </div>
     `

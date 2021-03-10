@@ -50,7 +50,7 @@ const queryQuestions = async (context: RouterContext) => {
     
     const query = await context.request.body().value;
 
-    if (!query) {
+    if (!query || typeof query != "string" || !query.trim()) {
         context.throw(Status.BadRequest, "Bad Request");
     }
     
@@ -141,7 +141,7 @@ const putQuestion = async (context: RouterContext) => {
         context.throw(Status.BadRequest, "Bad Request");
     }
     
-    // For some reason, when I use Question.find() instead of this, I can't await the Promise
+    // update() on a Question retrieved with find() is different from one retrieved with where()
     const question = Question.where("id", context.params.id);
 
     const body = context.request.body();
@@ -160,7 +160,6 @@ const putQuestion = async (context: RouterContext) => {
     
     // When using the already existing const question, the request never finishes...
     const updatedQuestion = await Question.find(context.params.id);
-
 
     addKeywords(updatedQuestion);
 
