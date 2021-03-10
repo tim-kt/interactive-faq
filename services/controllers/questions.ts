@@ -1,6 +1,7 @@
 import { Database, SQLite3Connector } from "https://deno.land/x/denodb/mod.ts";
-import Question from "../models.ts";
 import { RouterContext, Status } from "https://deno.land/x/oak/mod.ts";
+import Question from "../models.ts";
+import { verifyUser } from "../jwt_verify.ts";
 
 const connector = new SQLite3Connector({filepath: "faq.sqlite"});
 const db = new Database(connector);
@@ -10,8 +11,6 @@ db.sync();
 
 /**
  * Responds with the question of the given ID.
- * 
- * Returns a 400 Bad Request if the id parameter is not given.
  * 
  * @param context the request's context
  */
@@ -91,14 +90,16 @@ const queryQuestions = async (context: RouterContext) => {
  * Creates a new question in the database with the given data
  * and generates keywords for the question.
  * 
- * Returns a 400 Bad Request if the request's body is empty 
- * or if the data is in a wrong format.
- * 
  * @param context the request's context
  */
 const postQuestion = async (context: RouterContext) => {
     if (!context.request.hasBody) {
-        context.throw(Status.BadRequest, "Bad Request");
+        context.throw(Status.BadRequest);
+    }
+
+    const verification = await verifyUser(context.request.headers.get("Authorization"), "broadcaster");
+    if (verification != null) {
+        context.throw(verification);
     }
 
     const body = context.request.body();
@@ -113,7 +114,7 @@ const postQuestion = async (context: RouterContext) => {
         question = await Question.create(formData.fields);
     }
     else {
-        context.throw(Status.BadRequest, "Bad request");
+        context.throw(Status.BadRequest);
     }
 
     addKeywords(question);
@@ -127,18 +128,20 @@ const postQuestion = async (context: RouterContext) => {
  * Updates a question of the given ID with the given data
  * and also updates the question's keywords.
  * 
- * Returns a 400 Bad Request if the id parameter is not given, 
- * the request's body is empty or if the data is in a wrong format.
- * 
  * @param context the request's context
  */
 const putQuestion = async (context: RouterContext) => {
     if (!context.params || !context.params.id) {
-        context.throw(Status.BadRequest, "Bad request");
+        context.throw(Status.BadRequest);
     }
 
     if (!context.request.hasBody) {
-        context.throw(Status.BadRequest, "Bad Request");
+        context.throw(Status.BadRequest);
+    }
+
+    const verification = await verifyUser(context.request.headers.get("Authorization"), "broadcaster");
+    if (verification != null) {
+        context.throw(verification);
     }
     
     // update() on a Question retrieved with find() is different from one retrieved with where()
@@ -155,7 +158,7 @@ const putQuestion = async (context: RouterContext) => {
         question.update(formData.fields);
     }
     else {
-        context.throw(Status.BadRequest, "Bad request");
+        context.throw(Status.BadRequest);
     }
     
     // When using the already existing const question, the request never finishes...
@@ -171,13 +174,16 @@ const putQuestion = async (context: RouterContext) => {
 /**
  * Deletes the question of the given ID.
  * 
- * Returns a 400 Bad Request if the id parameter is not given.
- * 
  * @param context the request's context
  */
 const deleteQuestion = async (context: RouterContext) => {
     if (!context.params || !context.params.id) {
-        context.throw(Status.BadRequest, "Bad request");
+        context.throw(Status.BadRequest);
+    }
+
+    const verification = await verifyUser(context.request.headers.get("Authorization"), "broadcaster");
+    if (verification != null) {
+        context.throw(verification);
     }
 
     await Question.deleteById(context.params.id);
@@ -215,4 +221,5 @@ function addKeywords(question: Question) {
     question.update()
 }
 
+// TODO I think I can do this with functions as well (so why declare constants?)
 export { getQuestion, getQuestions, queryQuestions, postQuestion, putQuestion, deleteQuestion };

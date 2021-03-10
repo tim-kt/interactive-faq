@@ -5,12 +5,11 @@ const router = new Router();
 
 // TODO create OpenAPI specification
 router
-    .get("/", (context) => {
-        context.response.body = "Available endpoints: GET /question, GET /questions, POST /question, PUT /question, DELETE /question";
-    })
+    // Public (TODO restrict to Twitch viewer?)
     .get("/question/:id", getQuestion)
     .get("/questions", getQuestions)
     .post("/questions/query", queryQuestions)
+    // Restricted to broadcaster
     .post("/question", postQuestion)
     .put("/question/:id", putQuestion)
     .delete("/question/:id", deleteQuestion);
