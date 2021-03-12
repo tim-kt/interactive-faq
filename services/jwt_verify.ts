@@ -9,7 +9,7 @@ import { Status, ErrorStatus } from "https://deno.land/x/oak/mod.ts";
 const args = parse(Deno.args);
 
 if (!args.s) {
-    console.log(bold(red("No JWT Secret provided (-s argument).")));
+    console.log(bold(red("No JWT secret provided (-s argument).")));
     console.log(bold(red("Restricted routes will not be accessible.")));
 }
 
@@ -38,7 +38,6 @@ export async function verifyUser(bearer: string | null, requiredRole: string): P
     }
 
     if (!bearer || !bearer.trim() || !bearer.startsWith("Bearer ")) {
-        console.log("Invalid format");
         return Status.Forbidden;
     }
 
@@ -59,12 +58,10 @@ export async function verifyUser(bearer: string | null, requiredRole: string): P
             return null;
         }
         else {
-            console.log("Invalid user role");
             return Status.Forbidden;
         }
     }
     catch(e) {
-        console.log("Invalid JWT: " + e.message);
         return Status.Forbidden;
     }
 }

@@ -148,6 +148,7 @@ const putQuestion = async (context: RouterContext) => {
     const question = Question.where("id", context.params.id);
 
     const body = context.request.body();
+
     if (body.type === "json") {
         // TODO verify types
         question.update(await body.value);
