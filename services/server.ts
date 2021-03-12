@@ -1,6 +1,7 @@
+import { parse } from "https://deno.land/std/flags/mod.ts";
 import { Application } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { bold, yellow } from "https://deno.land/std/fmt/colors.ts";
+import { bold, yellow, red } from "https://deno.land/std/fmt/colors.ts";
 
 import router from "./routes.ts";
 
@@ -10,8 +11,31 @@ app.use(oakCors());
 app.use(router.allowedMethods());
 app.use(router.routes());
 
-app.addEventListener("listen", ({ hostname, port}) => {
-    console.log(bold("Server running on ") + yellow(`${hostname}:${port}`));
-})
+const args = parse(Deno.args);
 
-await app.listen({ hostname: "localhost", port: 8000});
+if (!args.c || !args.k) {
+    console.log(bold(red("Paths to TLS certificate (-c argument) and/or key (-k argument) not provided.")));
+    console.log(bold(red("Traffic will not be encrypted.\n")));
+
+    app.addEventListener("listen", ({ hostname, port}) => {
+        console.log(bold("Server running on ") + yellow(`${hostname}:${port}`));
+    })
+
+    await app.listen({ 
+        hostname: "0.0.0.0", 
+        port: 80,
+    });
+}
+else {
+    app.addEventListener("listen", ({ hostname, port}) => {
+        console.log(bold("Encrypted server running on ") + yellow(`${hostname}:${port}`));
+    })
+
+    await app.listen({ 
+        hostname: "0.0.0.0", 
+        port: 80,
+        secure: true,
+        certFile: args.c,
+        keyFile: args.k,
+    });
+}

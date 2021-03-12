@@ -10,7 +10,7 @@ const args = parse(Deno.args);
 
 if (!args.s) {
     console.log(bold(red("No JWT secret provided (-s argument).")));
-    console.log(bold(red("Restricted routes will not be accessible.")));
+    console.log(bold(red("Restricted routes will not be accessible.\n")));
 }
 
 const secret = args.s ? Base64.fromBase64String(args.s).toString() : "NOT A REAL SECRET";
