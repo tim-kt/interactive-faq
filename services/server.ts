@@ -1,7 +1,7 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import { Application } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { bold, yellow, red } from "https://deno.land/std/fmt/colors.ts";
+import { bold, green, yellow, red } from "https://deno.land/std/fmt/colors.ts";
 
 import router from "./routes.ts";
 
@@ -28,12 +28,12 @@ if (!args.c || !args.k) {
 }
 else {
     app.addEventListener("listen", ({ hostname, port}) => {
-        console.log(bold("Encrypted server running on ") + yellow(`${hostname}:${port}`));
+        console.log(bold(green("Encrypted") + " server running on ") + yellow(`${hostname}:${port}`));
     })
 
     await app.listen({ 
         hostname: "0.0.0.0", 
-        port: 80,
+        port: 443,
         secure: true,
         certFile: args.c,
         keyFile: args.k,

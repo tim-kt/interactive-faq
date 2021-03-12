@@ -44,7 +44,7 @@ function generateCreatePage() {
 }
 
 function loadView() {
-    fetch("http://interactive-faq.tk:8000/questions/")
+    fetch("https://interactive-faq.tk/questions/")
         .then(response => response.json())
         .then(questions => {
             window.document.getElementById("questions").innerHTML = questions.map(question => generateCard(question)).join("");
@@ -57,7 +57,7 @@ function reloadView() {
 }
 
 function reloadCard(id) {
-    fetch("http://interactive-faq.tk:8000/question/" + id)
+    fetch("https://interactive-faq.tk/question/" + id)
         .then(response => response.json())
         .then(question => {
             window.document.getElementById("card-" + id).outerHTML = generateCard(question);
@@ -69,7 +69,7 @@ function edit(id) {
     window.document.getElementById("edit-page").classList.add("active");
 
     // Get the question, generate the edit page and resize every textarea
-    fetch("http://interactive-faq.tk:8000/question/" + id)
+    fetch("https://interactive-faq.tk/question/" + id)
         .then(response => response.json())
         .then(data => window.document.getElementById("edit-page").innerHTML = generateEditPage(data, id))
         .then(() => Array.from(window.document.getElementsByTagName("textarea")).map(element => autoGrow(element)));
@@ -84,7 +84,7 @@ function save(id) {
 
     // TODO "Success" or "Failure" popup
     if (id == -1) {
-        fetch("http://interactive-faq.tk:8000/question/", {
+        fetch("https://interactive-faq.tk/question/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -103,7 +103,7 @@ function save(id) {
         });
     }
         else {
-        fetch("http://interactive-faq.tk:8000/question/" + id, {
+        fetch("https://interactive-faq.tk/question/" + id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -123,7 +123,7 @@ function save(id) {
 
 
 function delQuestion(id) {
-    fetch("http://interactive-faq.tk:8000/question/" + id, {
+    fetch("https://interactive-faq.tk/question/" + id, {
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + jwt,

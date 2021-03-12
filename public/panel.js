@@ -13,7 +13,7 @@ async function query() {
         return;
     }
 
-    const response = await fetch("http://interactive-faq.tk:8000/questions/query", {
+    const response = await fetch("https://interactive-faq.tk/questions/query", {
         method: "POST",
         headers: {"Content-Type": "text/plain"},
         body: input,
