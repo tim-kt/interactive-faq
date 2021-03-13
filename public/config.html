@@ -9,8 +9,19 @@
 
         <h2>Interactive FAQ - Configuration page</h2>
         <div id="questions"></div>
-        <button class="btn create-btn white-on-purple" onclick="create()">Create new question</button>
-        <div id="edit-page" class=""></div>
+        <button id="new-question-btn" class="btn create-btn white-on-purple">Create new question</button>
+        <div id="edit-page" class="">        <p>Question</p>
+            <textarea id="edit-question"></textarea>
+            <p>Answer</p>
+            <textarea id="edit-answer"></textarea>
+            <p>Text</p>
+            <textarea id="edit-text"></textarea>
+            <div class="edit-actions">
+                <button id="save-btn" class="btn edit-btn save-btn white-on-purple">Save</button>
+                <button id="cancel-btn" class="btn edit-btn cancel-btn">Cancel</button>
+                <button id="delete-btn" class="btn edit-btn delete-btn">Delete</button>
+            </div>
+        </div>
         <div id="overlay" class=""></div>
 
         <script src="config.js"></script>

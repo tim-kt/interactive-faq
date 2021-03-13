@@ -38,3 +38,5 @@ function generateCard(question, answer, text) {
         </div>
     `
 }
+
+window.document.getElementById("btn").addEventListener("click", query);
