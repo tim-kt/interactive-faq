@@ -13,7 +13,7 @@ async function query() {
         return;
     }
 
-    const response = await fetch("https://interactive-faq.tk/questions/query", {
+    const response = await fetch("https://interactive-faq.tk/questions/" + channel + "/query", {
         method: "POST",
         headers: {"Content-Type": "text/plain"},
         body: input,
@@ -40,3 +40,9 @@ function generateCard(question, answer, text) {
 }
 
 window.document.getElementById("btn").addEventListener("click", query);
+
+// Save channel ID
+var channel;
+
+// TODO Don't let the user click "Save" if extension isn't authorized yet
+window.Twitch.ext.onAuthorized(auth => { channel = auth.channelId });

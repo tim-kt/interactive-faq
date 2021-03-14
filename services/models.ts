@@ -15,6 +15,7 @@ class Question extends Model {
         answer: DataTypes.STRING,
         text: DataTypes.TEXT,
         keywords: DataTypes.TEXT,
+        channel: DataTypes.STRING,
     }
 }
 

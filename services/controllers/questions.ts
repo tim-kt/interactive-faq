@@ -14,7 +14,7 @@ db.sync();
  * 
  * @param context the request's context
  */
-const getQuestion = async (context: RouterContext) => {
+async function getQuestion(context: RouterContext) {
     if (!context.params || !context.params.id) {
         context.throw(Status.BadRequest, "Bad request");
     }
@@ -25,11 +25,11 @@ const getQuestion = async (context: RouterContext) => {
 }
 
 /**
- * Response with a list of all questions in the database.
+ * Responds with a list of all questions in the database.
  * 
  * @param context the request's context
  */
-const getQuestions = async (context: RouterContext) => {
+async function getAllQuestions(context: RouterContext) {
     const questions = await Question.all();
     
     context.response.body = JSON.stringify(questions);
@@ -37,11 +37,30 @@ const getQuestions = async (context: RouterContext) => {
 }
 
 /**
- * Queries a question based on an query string.
+ * Responds with a list of all questions specific to the given channel.
  * 
  * @param context the request's context
  */
-const queryQuestions = async (context: RouterContext) => {
+async function getChannelSpecificQuestions(context: RouterContext) {
+    if (!context.params || !context.params.channel) {
+        context.throw(Status.BadRequest, "Bad request");
+    }
+
+    const questions = await Question.where("channel", context.params.channel).all();
+
+    context.response.body = JSON.stringify(questions);
+    context.response.type = "json";
+}
+
+/**
+ * Queries a question based on an query string for the given channel
+ * 
+ * @param context the request's context
+ */
+async function queryQuestions(context: RouterContext) {
+    if (!context.params || !context.params.channel) {
+        context.throw(Status.BadRequest, "Bad request");
+    }
     
     if (!context.request.hasBody) {
         context.throw(Status.BadRequest, "Bad Request");
@@ -58,7 +77,8 @@ const queryQuestions = async (context: RouterContext) => {
     let mostMatchesId = -1;
     let mostMatches = 0;
 
-    for (const question of await Question.all()) {
+    const questions = await Question.where("channel", context.params.channel).all();
+    for (const question of questions) {
         if (!question.keywords) {
             addKeywords(question);
         }
@@ -92,7 +112,11 @@ const queryQuestions = async (context: RouterContext) => {
  * 
  * @param context the request's context
  */
-const postQuestion = async (context: RouterContext) => {
+async function postQuestion(context: RouterContext) {
+    if (!context.params || !context.params.channel) {
+        context.throw(Status.BadRequest, "Bad request");
+    }
+    
     if (!context.request.hasBody) {
         context.throw(Status.BadRequest);
     }
@@ -116,6 +140,10 @@ const postQuestion = async (context: RouterContext) => {
     else {
         context.throw(Status.BadRequest);
     }
+    
+    // Add channel ID to question
+    question.channel = context.params.channel;
+    question.update();
 
     addKeywords(question);
 
@@ -130,7 +158,7 @@ const postQuestion = async (context: RouterContext) => {
  * 
  * @param context the request's context
  */
-const putQuestion = async (context: RouterContext) => {
+async function putQuestion(context: RouterContext) {
     if (!context.params || !context.params.id) {
         context.throw(Status.BadRequest);
     }
@@ -177,7 +205,7 @@ const putQuestion = async (context: RouterContext) => {
  * 
  * @param context the request's context
  */
-const deleteQuestion = async (context: RouterContext) => {
+async function deleteQuestion(context: RouterContext) {
     if (!context.params || !context.params.id) {
         context.throw(Status.BadRequest);
     }
@@ -222,5 +250,4 @@ function addKeywords(question: Question) {
     question.update()
 }
 
-// TODO I think I can do this with functions as well (so why declare constants?)
-export { getQuestion, getQuestions, queryQuestions, postQuestion, putQuestion, deleteQuestion };
+export { getQuestion, getAllQuestions, getChannelSpecificQuestions, queryQuestions, postQuestion, putQuestion, deleteQuestion };

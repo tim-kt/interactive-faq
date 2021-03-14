@@ -13,7 +13,7 @@ function generateCard(question) {
 }
 
 function reloadCard(id) {
-    fetch("https://interactive-faq.tk/question/" + id)
+    fetch("https://interactive-faq.tk/questions/all/" + id)
         .then(response => response.json())
         .then(question => {
             window.document.getElementById("card-" + id).outerHTML = generateCard(question);
@@ -25,7 +25,7 @@ function reloadCard(id) {
 }
 
 function loadView() {
-    fetch("https://interactive-faq.tk/questions/")
+    fetch("https://interactive-faq.tk/questions/" + channel)
         .then(response => response.json())
         .then(questions => {
             window.document.getElementById("questions").innerHTML = questions.map(question => generateCard(question)).join("");
@@ -50,7 +50,7 @@ function openEditPage() {
     window.document.getElementById("edit-page").classList.add("active");
 
     if (currentQuestion != -1) {
-    fetch("https://interactive-faq.tk/question/" + currentQuestion)
+    fetch("https://interactive-faq.tk/questions/all/" + currentQuestion)
         .then(response => response.json())
         .then(data => {
             window.document.getElementById("edit-question").value = data.question;
@@ -80,7 +80,7 @@ function save() {
     
     // TODO "Success" or "Failure" popup
     if (currentQuestion == -1) {
-        fetch("https://interactive-faq.tk/question/", {
+        fetch("https://interactive-faq.tk/questions/" + channel, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -98,7 +98,7 @@ function save() {
         });
     }
     else {
-        fetch("https://interactive-faq.tk/question/" + currentQuestion, {
+        fetch("https://interactive-faq.tk/questions/all/" + currentQuestion, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -117,7 +117,7 @@ function save() {
 }
 
 function del() {
-    fetch("https://interactive-faq.tk/question/" + currentQuestion, {
+    fetch("https://interactive-faq.tk/questions/all/" + currentQuestion, {
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + jwt,
@@ -140,14 +140,17 @@ function resizeAllTextareas() {
     Array.from(window.document.getElementsByTagName("textarea")).map(element => resize(element));
 }
 
-// Load all questions
-loadView();
-
-// Save token
+// Save JWT token and channel ID
 var jwt;
+var channel;
 
 // TODO Don't let the user click "Save" if extension isn't authorized yet
-window.Twitch.ext.onAuthorized(auth => { jwt = auth.token });
+window.Twitch.ext.onAuthorized(auth => { 
+    jwt = auth.token;
+    channel = auth.channelId;
+    twitch.log("Channel ID: " + channel);
+    loadView();
+});
 
 // Current question being edited (if any) to refer to in save() and del()
 var currentQuestion = -1;
