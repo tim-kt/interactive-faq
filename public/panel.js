@@ -1,3 +1,5 @@
+const twitch = window.Twitch.ext.rig;
+
 async function query() {
     const input = window.document.getElementById("question-field").value;
 
@@ -11,13 +13,17 @@ async function query() {
         body: input,
     });
     
-    if (response.status == 404) {
-        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Sorry, I couldn't find anything.<br>Ask in chat!</div>";
-    }
-    else {
+    // Properly handle error cases
+    if (response.status == 200) {
         const data = await response.json();
         window.document.getElementById("output").innerHTML = generateCard(data.question, data.answer, data.text);
-    }    
+    }
+    else if (response.status == 404) {
+        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Sorry, I couldn't find anything.<br>Ask in chat!</div>";
+    }
+    else {        
+        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Something went wrong...<br>Please try searching again!</div>";
+    }
 }
 
 function generateCard(question, answer, text) {
@@ -44,6 +50,13 @@ searchButton.addEventListener("click", query);
 
 // Save channel ID
 var channel;
-
-// TODO Don't let the user click "Save" if extension isn't authorized yet
 window.Twitch.ext.onAuthorized(auth => { channel = auth.channelId });
+
+
+// TODO Switch between light and dark theme
+/* var lightTheme = true;
+
+window.Twitch.ext.onContext(context => {
+    lightTheme = context.theme == "light";
+})
+*/

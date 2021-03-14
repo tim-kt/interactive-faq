@@ -46,12 +46,11 @@ function reloadView() {
 }
 
 function openEditPage() {
-
     window.document.getElementById("overlay").classList.add("active");
     window.document.getElementById("edit-page").classList.add("active");
-
+    
     if (currentQuestion != -1) {
-    fetch("https://interactive-faq.tk/questions/all/" + currentQuestion)
+        fetch("https://interactive-faq.tk/questions/all/" + currentQuestion)
         .then(response => response.json())
         .then(data => {
             window.document.getElementById("edit-question").value = data.question;
@@ -64,9 +63,11 @@ function openEditPage() {
         window.document.getElementById("edit-question").value = "";
         window.document.getElementById("edit-answer").value = "";
         window.document.getElementById("edit-text").value = "";
-
+        
         resizeAllTextareas();
     }
+
+    window.document.getElementById("edit-question").focus();
 }
 
 function closeEditPage() {

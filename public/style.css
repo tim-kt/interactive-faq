@@ -186,6 +186,10 @@ h3 {
     margin-bottom: 10px;
 }
 
+p {
+    margin: 8px 0;
+}
+
 textarea {
     resize: none;
     overflow: hidden;
