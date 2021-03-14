@@ -1,13 +1,35 @@
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import { Application } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { bold, green, yellow, red } from "https://deno.land/std/fmt/colors.ts";
+import { bold, green, cyan, yellow, red } from "https://deno.land/std/fmt/colors.ts";
 
 import router from "./routes.ts";
 
 const app = new Application();
 
 app.use(oakCors());
+
+// Logger
+app.use(async (ctx, next) => {
+    await next();
+    const rt = ctx.response.headers.get("X-Response-Time");
+    console.log(
+      `${green(ctx.request.method)} ${cyan(ctx.request.url.pathname)} - ${
+        bold(
+          String(rt),
+        )
+      }`,
+    );
+});
+
+// Timing
+app.use(async (ctx, next) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    ctx.response.headers.set("X-Response-Time", `${ms}ms`);
+});
+
 app.use(router.allowedMethods());
 app.use(router.routes());
 
