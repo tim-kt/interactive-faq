@@ -7,22 +7,26 @@
     <body>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
 
-        <h2>Interactive FAQ - Configuration page</h2>
+        <h2>Configuration page</h2>
         <div id="questions"></div>
-        <button id="new-question-btn" class="btn create-btn white-on-purple">Create new question</button>
-        <div id="edit-page" class="">        <p>Question</p>
-            <textarea id="edit-question"></textarea>
-            <p>Answer</p>
-            <textarea id="edit-answer"></textarea>
-            <p>Text</p>
-            <textarea id="edit-text"></textarea>
-            <div class="edit-actions">
-                <button id="save-btn" class="btn edit-btn save-btn white-on-purple">Save</button>
-                <button id="cancel-btn" class="btn edit-btn cancel-btn">Cancel</button>
-                <button id="delete-btn" class="btn edit-btn delete-btn">Delete</button>
+        <button id="create-question" class="btn">Create new question</button>
+        <div id="edit-page">
+            <div id="edit-container">
+                <h3 id="edit-page-heading"></h3>
+                <p>Question</p>
+                <textarea id="edit-question"></textarea>
+                <p>Answer</p>
+                <textarea id="edit-answer"></textarea>
+                <p>Text</p>
+                <textarea id="edit-text"></textarea>
+                <div id="edit-actions">
+                    <button id="save-btn" class="btn">Save</button>
+                    <button id="cancel-btn" class="btn">Cancel</button>
+                    <button id="delete-btn" class="btn">Delete</button>
+                </div>
             </div>
         </div>
-        <div id="overlay" class=""></div>
+        <div id="overlay"></div>
 
         <script src="config.js"></script>
     </body>

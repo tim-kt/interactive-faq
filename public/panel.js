@@ -1,13 +1,5 @@
-const input = window.document.getElementById("question");
-
-input.addEventListener("keyup", (event) => {
-    if (event.key == "Enter") {
-        window.document.getElementById("btn").click();
-    }
-});
-
 async function query() {
-    const input = window.document.getElementById("question").value;
+    const input = window.document.getElementById("question-field").value;
 
     if (!input || !input.trim()) {
         return;
@@ -20,7 +12,7 @@ async function query() {
     });
     
     if (response.status == 404) {
-        window.document.getElementById("output").innerHTML = "Sorry, I couldn't find anything. Ask in chat!";
+        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Sorry, I couldn't find anything.<br>Ask in chat!</div>";
     }
     else {
         const data = await response.json();
@@ -39,7 +31,16 @@ function generateCard(question, answer, text) {
     `
 }
 
-window.document.getElementById("btn").addEventListener("click", query);
+const questionField = window.document.getElementById("question-field");
+const searchButton = window.document.getElementById("search-button");
+questionField.addEventListener("keyup", (event) => {
+    if (event.key == "Enter") {
+        query();
+    }
+});
+searchButton.addEventListener("click", query);
+
+
 
 // Save channel ID
 var channel;

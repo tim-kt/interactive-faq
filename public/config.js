@@ -33,6 +33,7 @@ function loadView() {
                 const id = card.id.split("-")[1];
                 card.addEventListener("click", () => {
                     currentQuestion = id;
+                    window.document.getElementById("edit-page-heading").innerHTML = "Edit question";
                     openEditPage();
                 });
             });
@@ -148,7 +149,6 @@ var channel;
 window.Twitch.ext.onAuthorized(auth => { 
     jwt = auth.token;
     channel = auth.channelId;
-    twitch.log("Channel ID: " + channel);
     loadView();
 });
 
@@ -156,8 +156,9 @@ window.Twitch.ext.onAuthorized(auth => {
 var currentQuestion = -1;
 
 // Creating a new question
-window.document.getElementById("new-question-btn").addEventListener("click", () => {
+window.document.getElementById("create-question").addEventListener("click", () => {
     currentQuestion = -1;
+    window.document.getElementById("edit-page-heading").innerHTML = "Create new question";
     openEditPage();
 });
 
