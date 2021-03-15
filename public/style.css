@@ -13,8 +13,12 @@
     color: #232127;
 }
 
-body {
+body.light {
     background-color: white;
+}
+
+body.dark {
+    background-color: #201c2b;
 }
 
 #search-bar {
@@ -55,13 +59,21 @@ body {
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
 }
 
-#not-found {
+#error {
     text-align: center;
-    color: grey;
     margin-top: 32px;
 }
 
+#error.light {
+    color: grey;
+}
+
+#error.dark {
+    color: darkgrey;
+}
+
 .card {
+    background-color: white;
     border-radius: 8px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
     padding: 10px;

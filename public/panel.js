@@ -19,10 +19,10 @@ async function query() {
         window.document.getElementById("output").innerHTML = generateCard(data.question, data.answer, data.text);
     }
     else if (response.status == 404) {
-        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Sorry, I couldn't find anything.<br>Ask in chat!</div>";
+        window.document.getElementById("output").innerHTML = `<div id="error" class="${theme}">Sorry, I couldn't find anything.<br>Ask in chat!</div>`;
     }
     else {        
-        window.document.getElementById("output").innerHTML = "<div id=\"not-found\">Something went wrong...<br>Please try searching again!</div>";
+        window.document.getElementById("output").innerHTML = `<div id="error" class="${theme}">Something went wrong...<br>Please try searching again!</div>`;
     }
 }
 
@@ -53,10 +53,13 @@ var channel;
 window.Twitch.ext.onAuthorized(auth => { channel = auth.channelId });
 
 
-// TODO Switch between light and dark theme
-/* var lightTheme = true;
-
+// Switch between light and dark theme
+var theme;
 window.Twitch.ext.onContext(context => {
-    lightTheme = context.theme == "light";
+    theme = context.theme;
+    window.document.body.className = theme;
+    const error = window.document.getElementById("error");
+    if (error) {
+        error.className = theme;
+    }
 })
-*/
